@@ -269,6 +269,8 @@ class LLMSettings(BaseModel):
         "gemini-1.5-pro",
         "gemini-2.0-flash",
     ]
+    # System Prompt
+    system_prompt: str = ""
     # Common
     temperature: float = 0.7
     max_tokens: int = 1000
@@ -288,6 +290,7 @@ class LLMSettingsUpdate(BaseModel):
     google_api_key: Optional[str] = None
     google_model: Optional[str] = None
     google_models: Optional[List[str]] = None
+    system_prompt: Optional[str] = None
     temperature: Optional[float] = None
     max_tokens: Optional[int] = None
     pinecone_api_key: Optional[str] = None

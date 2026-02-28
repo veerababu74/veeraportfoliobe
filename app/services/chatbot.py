@@ -118,6 +118,8 @@ def _default_llm_settings() -> dict:
         "google_api_key": settings.GOOGLE_API_KEY or "",
         "google_model": "gemini-1.5-flash",
         "google_models": ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"],
+        # System Prompt (empty = use DEFAULT_SYSTEM_PROMPT)
+        "system_prompt": "",
         # Common
         "temperature": 0.7,
         "max_tokens": 1000,
@@ -533,15 +535,12 @@ async def query_chatbot(message: str) -> dict:
 
         context_text = "\n\n".join(contexts)
 
-        # 3. Load system prompt from site settings (if configured)
+        # 3. Load system prompt from LLM settings (dashboard-configurable)
         system_prompt = DEFAULT_SYSTEM_PROMPT
-        try:
-            db = get_db()
-            site_settings = await db.site_settings.find_one({})
-            if site_settings and site_settings.get("chatbot_system_prompt"):
-                system_prompt = site_settings["chatbot_system_prompt"]
-        except Exception as e:
-            print(f"[Chatbot] System prompt load error: {e}")
+        custom_prompt = llm_settings.get("system_prompt", "").strip()
+        if custom_prompt:
+            system_prompt = custom_prompt
+            print("[Chatbot] Using custom system prompt from dashboard")
 
         # 4. Generate response using the selected LLM
         user_prompt = (
