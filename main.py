@@ -27,7 +27,7 @@ origins = [
     settings.FRONTEND_URL,
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://pilliveerababu.netlify.app/"
+    "https://pilliveerababu.netlify.app"
 ]
 # Allow all Vercel preview URLs for this project
 if settings.FRONTEND_URL and ".vercel.app" in settings.FRONTEND_URL:
